@@ -23,7 +23,7 @@ Begin VB.Form Produk
          Strikethrough   =   0   'False
       EndProperty
       Height          =   495
-      Left            =   7920
+      Left            =   8160
       TabIndex        =   11
       Top             =   4080
       Width           =   2775
@@ -148,7 +148,7 @@ Begin VB.Form Produk
       Width           =   1935
    End
    Begin VB.CommandButton Command3 
-      Caption         =   "EDIT"
+      Caption         =   "UPDATE"
       Height          =   615
       Left            =   12000
       TabIndex        =   7
@@ -174,7 +174,7 @@ Begin VB.Form Produk
          Strikethrough   =   0   'False
       EndProperty
       Height          =   495
-      Left            =   7920
+      Left            =   8160
       TabIndex        =   5
       Top             =   4800
       Width           =   2775
@@ -190,7 +190,7 @@ Begin VB.Form Produk
          Strikethrough   =   0   'False
       EndProperty
       Height          =   495
-      Left            =   7920
+      Left            =   8160
       TabIndex        =   4
       Top             =   3360
       Width           =   2775
@@ -213,7 +213,7 @@ Begin VB.Form Produk
       Width           =   1335
    End
    Begin VB.Label Label4 
-      Caption         =   "NAMA PRODUK"
+      Caption         =   "PRODUCT NAME"
       BeginProperty Font 
          Name            =   "Calibri"
          Size            =   14.25
@@ -230,7 +230,7 @@ Begin VB.Form Produk
       Width           =   2055
    End
    Begin VB.Label Label3 
-      Caption         =   "JENIS PRODUK"
+      Caption         =   "TYPES OF PRODUCT"
       BeginProperty Font 
          Name            =   "Calibri"
          Size            =   14.25
@@ -244,10 +244,10 @@ Begin VB.Form Produk
       Left            =   5640
       TabIndex        =   3
       Top             =   4800
-      Width           =   2055
+      Width           =   2415
    End
    Begin VB.Label Label2 
-      Caption         =   "KODE PRODUK"
+      Caption         =   "PRODUCT CODE"
       BeginProperty Font 
          Name            =   "Calibri"
          Size            =   14.25
@@ -318,9 +318,14 @@ Set conn = New ADODB.Connection
     "Provider=SQLOLEDB.1;Integrated Security=SSPI;Persist Security Info=False;Initial Catalog=simproduksi;Data Source=DESKTOP-KQT6V0C"
     conn.Open
 
+    If Text3 = "" Or Text2 = "" Then
+        MsgBox "Data Not Completed", vbCritical + vbOKOnly, "Information"
+    Exit Sub
+    End If
+
     SQLTambah = "INSERT INTO dbo.produk(kode_produk, nama_produk, jenis_produk)" & "values ('" & Text1.Text & "','" & Text3.Text & "','" & Text2.Text & "')"
     conn.Execute SQLTambah
-    MsgBox " Data Berhasil Disimpan ", vbInformation, "Messages"
+    MsgBox " Data Saved ", vbInformation, "Messages"
     Text1.SetFocus
     Text2.SetFocus
     Text3.SetFocus
@@ -346,9 +351,15 @@ Set conn = New ADODB.Connection
     jenis_produk = Text2
     Text3 = Replace(Text3, "'", "''")
     Text2 = Replace(Text2, "'", "''")
+    
+    If Text3 = "" Or Text2 = "" Then
+        MsgBox "Data Not Completed", vbCritical + vbOKOnly, "Information"
+    Exit Sub
+    End If
+    
     SQLEdit = "Update produk Set nama_produk = '" & Text3 & "', jenis_produk = '" & Text2 & "' where kode_produk ='" & Text1 & "'"
     conn.Execute SQLEdit
-    MsgBox " Data Berhasil Diubah ", vbInformation, "Messages"
+    MsgBox " Data Updated ", vbInformation, "Messages"
     Text1.SetFocus
     Text2.SetFocus
     Text3.SetFocus
@@ -368,13 +379,16 @@ Set conn = New ADODB.Connection
     "Provider=SQLOLEDB.1;Integrated Security=SSPI;Persist Security Info=False;Initial Catalog=simproduksi;Data Source=DESKTOP-KQT6V0C"
     conn.Open
     
-    If MsgBox("Apakah data akan dihapus?", vbQuestion + vbOKCancel, "Confirmation") = vbOK Then
-        conn.Execute "Delete From produk where kode_produk = '" & Text1 & "'"
-        MsgBox " Data Berhasil Dihapus ", vbInformation, "Messages"
-        Text1.SetFocus
-        Text1.Text = ""
+    If Text1 = "" Then
+        MsgBox "Data Not Found", vbCritical + vbOKOnly, "Information"
+    Else
+        If MsgBox("Data Will be Deleted?", vbQuestion + vbOKCancel, "Confirmation") = vbOK Then
+            conn.Execute "Delete From produk where kode_produk = '" & Text1 & "'"
+            MsgBox " Data Deleted ", vbInformation, "Messages"
+            Text1.SetFocus
+            Text1.Text = ""
+        End If
     End If
-    
 Call Form_Load
 conn.Close
 End Sub

@@ -155,6 +155,7 @@ Begin VB.Form Menu
       Width           =   2655
    End
    Begin VB.Label Label1 
+      BackStyle       =   0  'Transparent
       Caption         =   "PT. PAPYRUS SAKTI PAPER MILL"
       BeginProperty Font 
          Name            =   "Calibri"

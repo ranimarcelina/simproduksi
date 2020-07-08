@@ -2,7 +2,7 @@ VERSION 5.00
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDATGRD.OCX"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSADODC.OCX"
 Begin VB.Form Pegawai 
-   Caption         =   "Pegawai"
+   Caption         =   "Employee"
    ClientHeight    =   3015
    ClientLeft      =   120
    ClientTop       =   465
@@ -131,7 +131,7 @@ Begin VB.Form Pegawai
       Width           =   1695
    End
    Begin VB.CommandButton Command3 
-      Caption         =   "EDIT"
+      Caption         =   "UPDATE"
       Height          =   615
       Left            =   12480
       TabIndex        =   11
@@ -228,6 +228,7 @@ Begin VB.Form Pegawai
       Width           =   1335
    End
    Begin VB.Label Label5 
+      BackStyle       =   0  'Transparent
       Caption         =   "STATUS"
       BeginProperty Font 
          Name            =   "Calibri"
@@ -245,6 +246,7 @@ Begin VB.Form Pegawai
       Width           =   2175
    End
    Begin VB.Label Label4 
+      BackStyle       =   0  'Transparent
       Caption         =   "PASSWORD"
       BeginProperty Font 
          Name            =   "Calibri"
@@ -262,7 +264,8 @@ Begin VB.Form Pegawai
       Width           =   2175
    End
    Begin VB.Label Label3 
-      Caption         =   "NAMA PEGAWAI"
+      BackStyle       =   0  'Transparent
+      Caption         =   "EMPLOYEE NAME"
       BeginProperty Font 
          Name            =   "Calibri"
          Size            =   14.25
@@ -279,7 +282,8 @@ Begin VB.Form Pegawai
       Width           =   2175
    End
    Begin VB.Label Label2 
-      Caption         =   "ID PEGAWAI"
+      BackStyle       =   0  'Transparent
+      Caption         =   "EMPLOYEE ID"
       BeginProperty Font 
          Name            =   "Calibri"
          Size            =   14.25
@@ -296,7 +300,8 @@ Begin VB.Form Pegawai
       Width           =   2175
    End
    Begin VB.Label Label1 
-      Caption         =   "STAFF"
+      BackStyle       =   0  'Transparent
+      Caption         =   "EMPLOYEE"
       BeginProperty Font 
          Name            =   "Calibri"
          Size            =   24
@@ -307,10 +312,10 @@ Begin VB.Form Pegawai
          Strikethrough   =   0   'False
       EndProperty
       Height          =   735
-      Left            =   9720
+      Left            =   8880
       TabIndex        =   1
       Top             =   1560
-      Width           =   1215
+      Width           =   2295
    End
 End
 Attribute VB_Name = "Pegawai"
@@ -349,9 +354,14 @@ Set conn = New ADODB.Connection
     "Provider=SQLOLEDB.1;Integrated Security=SSPI;Persist Security Info=False;Initial Catalog=simproduksi;Data Source=DESKTOP-KQT6V0C"
     conn.Open
 
+    If Text2 = "" Or Text3 = "" Or Text4 = "" Then
+        MsgBox "Data Not Completed", vbCritical + vbOKOnly, "Information"
+    Exit Sub
+    End If
+    
     SQLTambah = "INSERT INTO dbo.pegawai(id_pegawai, nama_pegawai, password, status)" & "values ('" & Text1.Text & "','" & Text2.Text & "','" & Text3.Text & "','" & Text4.Text & "')"
     conn.Execute SQLTambah
-    MsgBox " Data Berhasil Disimpan ", vbInformation, "Messages"
+    MsgBox " Data Saved ", vbInformation, "Messages"
     Text1.SetFocus
     Text2.SetFocus
     Text3.SetFocus
@@ -376,9 +386,15 @@ Set conn = New ADODB.Connection
     
     UserName = Text2
     Text2 = Replace(Text2, "'", "''")
+    
+    If Text2 = "" Or Text3 = "" Or Text4 = "" Then
+        MsgBox "Data Not Completed", vbCritical + vbOKOnly, "Information"
+    Exit Sub
+    End If
+    
     SQLEdit = "Update pegawai Set nama_pegawai = '" & Text2 & "',   password = '" & Text3 & "', status = '" & Text4 & "' where id_pegawai ='" & Text1 & "'"
     conn.Execute SQLEdit
-    MsgBox " Data Berhasil Diubah ", vbInformation, "Messages"
+    MsgBox " Data Updated ", vbInformation, "Messages"
     Text1.SetFocus
     Text2.SetFocus
     Text3.SetFocus
@@ -400,11 +416,15 @@ Set conn = New ADODB.Connection
     "Provider=SQLOLEDB.1;Integrated Security=SSPI;Persist Security Info=False;Initial Catalog=simproduksi;Data Source=DESKTOP-KQT6V0C"
     conn.Open
     
-    If MsgBox("Apakah data akan dihapus?", vbQuestion + vbOKCancel, "Confirmation") = vbOK Then
-        conn.Execute "Delete From pegawai where id_pegawai = '" & Text1 & "'"
-        MsgBox " Data Berhasil Dihapus ", vbInformation, "Messages"
-        Text1.SetFocus
-        Text1.Text = ""
+    If Text1 = "" Then
+        MsgBox "Data Not Found", vbCritical + vbOKOnly, "Information"
+    Else
+        If MsgBox("Data Will be Deleted?", vbQuestion + vbOKCancel, "Confirmation") = vbOK Then
+            conn.Execute "Delete From pegawai where id_pegawai = '" & Text1 & "'"
+            MsgBox " Data Deleted ", vbInformation, "Messages"
+            Text1.SetFocus
+            Text1.Text = ""
+        End If
     End If
 Call Form_Load
 conn.Close

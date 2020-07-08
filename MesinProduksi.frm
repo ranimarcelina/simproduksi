@@ -2,7 +2,7 @@ VERSION 5.00
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDATGRD.OCX"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSADODC.OCX"
 Begin VB.Form MesinProduksi 
-   Caption         =   "Mesin Produksi"
+   Caption         =   "Machine"
    ClientHeight    =   3015
    ClientLeft      =   120
    ClientTop       =   465
@@ -23,7 +23,7 @@ Begin VB.Form MesinProduksi
          Strikethrough   =   0   'False
       EndProperty
       Height          =   495
-      Left            =   8760
+      Left            =   9000
       TabIndex        =   11
       Top             =   4680
       Width           =   2655
@@ -147,7 +147,7 @@ Begin VB.Form MesinProduksi
       Width           =   1695
    End
    Begin VB.CommandButton Command3 
-      Caption         =   "EDIT"
+      Caption         =   "UPDATE"
       Height          =   615
       Left            =   12840
       TabIndex        =   7
@@ -190,7 +190,7 @@ Begin VB.Form MesinProduksi
          Strikethrough   =   0   'False
       EndProperty
       Height          =   495
-      Left            =   8760
+      Left            =   9000
       TabIndex        =   4
       Top             =   3960
       Width           =   2655
@@ -206,13 +206,14 @@ Begin VB.Form MesinProduksi
          Strikethrough   =   0   'False
       EndProperty
       Height          =   495
-      Left            =   8760
+      Left            =   9000
       TabIndex        =   3
       Top             =   3240
       Width           =   2655
    End
    Begin VB.Label Label4 
-      Caption         =   "KAPASITAS"
+      BackStyle       =   0  'Transparent
+      Caption         =   "CAPACITY"
       BeginProperty Font 
          Name            =   "Calibri"
          Size            =   14.25
@@ -229,7 +230,8 @@ Begin VB.Form MesinProduksi
       Width           =   1815
    End
    Begin VB.Label Label3 
-      Caption         =   "NAMA MESIN"
+      BackStyle       =   0  'Transparent
+      Caption         =   "MACHINE NAME"
       BeginProperty Font 
          Name            =   "Calibri"
          Size            =   14.25
@@ -243,10 +245,11 @@ Begin VB.Form MesinProduksi
       Left            =   6720
       TabIndex        =   2
       Top             =   3960
-      Width           =   1815
+      Width           =   2055
    End
    Begin VB.Label Label2 
-      Caption         =   "KODE MESIN"
+      BackStyle       =   0  'Transparent
+      Caption         =   "MACHINE CODE"
       BeginProperty Font 
          Name            =   "Calibri"
          Size            =   14.25
@@ -260,9 +263,10 @@ Begin VB.Form MesinProduksi
       Left            =   6720
       TabIndex        =   1
       Top             =   3240
-      Width           =   1815
+      Width           =   2055
    End
    Begin VB.Label Label1 
+      BackStyle       =   0  'Transparent
       Caption         =   "PAPER MACHINE"
       BeginProperty Font 
          Name            =   "Calibri"
@@ -317,9 +321,14 @@ Set conn = New ADODB.Connection
     "Provider=SQLOLEDB.1;Integrated Security=SSPI;Persist Security Info=False;Initial Catalog=simproduksi;Data Source=DESKTOP-KQT6V0C"
     conn.Open
 
+    If Text2 = "" Or Text3 = "" Then
+        MsgBox "Data Not Completed", vbCritical + vbOKOnly, "Information"
+    Exit Sub
+    End If
+
     SQLTambah = "INSERT INTO dbo.mesinproduksi(kode_mesin, nama_mesin, kapasitas)" & "values ('" & Text1.Text & "','" & Text2.Text & "','" & Text3.Text & "')"
     conn.Execute SQLTambah
-    MsgBox " Data Berhasil Disimpan ", vbInformation, "Messages"
+    MsgBox " Data Saved ", vbInformation, "Messages"
     Text1.SetFocus
     Text2.SetFocus
     Text3.SetFocus
@@ -343,9 +352,15 @@ Set conn = New ADODB.Connection
     kapasitas = Text3
     Text2 = Replace(Text2, "'", "''")
     Text3 = Replace(Text3, "'", "''")
+    
+    If Text2 = "" Or Text3 = "" Then
+        MsgBox "Data Not Completed", vbCritical + vbOKOnly, "Information"
+    Exit Sub
+    End If
+    
     SQLEdit = "Update mesinproduksi Set nama_mesin = '" & Text2 & "', kapasitas = '" & Text3 & "' where kode_mesin ='" & Text1 & "'"
     conn.Execute SQLEdit
-    MsgBox " Data Berhasil Diubah ", vbInformation, "Messages"
+    MsgBox " Data Updated ", vbInformation, "Messages"
     Text1.SetFocus
     Text2.SetFocus
     Text3.SetFocus
@@ -365,11 +380,15 @@ Set conn = New ADODB.Connection
     "Provider=SQLOLEDB.1;Integrated Security=SSPI;Persist Security Info=False;Initial Catalog=simproduksi;Data Source=DESKTOP-KQT6V0C"
     conn.Open
     
-    If MsgBox("Apakah data akan dihapus?", vbQuestion + vbOKCancel, "Confirmation") = vbOK Then
-        conn.Execute "Delete From mesinproduksi where kode_mesin = '" & Text1 & "'"
-        MsgBox " Data Berhasil Dihapus ", vbInformation, "Messages"
-        Text1.SetFocus
-        Text1.Text = ""
+    If Text1 = "" Then
+        MsgBox "Data Not Found", vbCritical + vbOKOnly, "Information"
+    Else
+        If MsgBox("Data Will be Deleted?", vbQuestion + vbOKCancel, "Confirmation") = vbOK Then
+            conn.Execute "Delete From mesinproduksi where kode_mesin = '" & Text1 & "'"
+            MsgBox " Data Deleted ", vbInformation, "Messages"
+            Text1.SetFocus
+            Text1.Text = ""
+        End If
     End If
 Call Form_Load
 conn.Close
