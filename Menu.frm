@@ -1,7 +1,7 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
 Begin VB.Form Menu 
-   Caption         =   "Menu Utama"
+   Caption         =   "Main Menu"
    ClientHeight    =   5100
    ClientLeft      =   225
    ClientTop       =   870
@@ -11,6 +11,23 @@ Begin VB.Form Menu
    ScaleWidth      =   11775
    StartUpPosition =   3  'Windows Default
    WindowState     =   2  'Maximized
+   Begin VB.CommandButton Command7 
+      Caption         =   "RAW MATERIAL"
+      BeginProperty Font 
+         Name            =   "Calibri"
+         Size            =   14.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   615
+      Left            =   8280
+      TabIndex        =   8
+      Top             =   4320
+      Width           =   2775
+   End
    Begin ComctlLib.StatusBar StatusBar1 
       Align           =   2  'Align Bottom
       Height          =   375
@@ -53,10 +70,10 @@ Begin VB.Form Menu
       Width           =   1455
    End
    Begin VB.CommandButton Command5 
-      Caption         =   "PERENCANAAN PRODUKSI"
+      Caption         =   "SCHEDULE"
       BeginProperty Font 
          Name            =   "Calibri"
-         Size            =   12
+         Size            =   14.25
          Charset         =   0
          Weight          =   700
          Underline       =   0   'False
@@ -70,10 +87,10 @@ Begin VB.Form Menu
       Width           =   3375
    End
    Begin VB.CommandButton Command4 
-      Caption         =   "PEGAWAI"
+      Caption         =   "EMPLOYEE"
       BeginProperty Font 
          Name            =   "Calibri"
-         Size            =   12
+         Size            =   14.25
          Charset         =   0
          Weight          =   700
          Underline       =   0   'False
@@ -87,10 +104,10 @@ Begin VB.Form Menu
       Width           =   2655
    End
    Begin VB.CommandButton Command3 
-      Caption         =   "PRODUK"
+      Caption         =   "PRODUCT"
       BeginProperty Font 
          Name            =   "Calibri"
-         Size            =   12
+         Size            =   14.25
          Charset         =   0
          Weight          =   700
          Underline       =   0   'False
@@ -104,10 +121,10 @@ Begin VB.Form Menu
       Width           =   2775
    End
    Begin VB.CommandButton Command2 
-      Caption         =   "MESIN PRODUKSI"
+      Caption         =   "MACHINE"
       BeginProperty Font 
          Name            =   "Calibri"
-         Size            =   12
+         Size            =   14.25
          Charset         =   0
          Weight          =   700
          Underline       =   0   'False
@@ -121,10 +138,10 @@ Begin VB.Form Menu
       Width           =   2895
    End
    Begin VB.CommandButton Command1 
-      Caption         =   "PEMESANAN"
+      Caption         =   "ORDER"
       BeginProperty Font 
          Name            =   "Calibri"
-         Size            =   12
+         Size            =   14.25
          Charset         =   0
          Weight          =   700
          Underline       =   0   'False
@@ -148,7 +165,7 @@ Begin VB.Form Menu
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Height          =   855
+      Height          =   735
       Left            =   7200
       TabIndex        =   0
       Top             =   1320
@@ -157,25 +174,22 @@ Begin VB.Form Menu
    Begin VB.Menu mnmaster 
       Caption         =   "Master"
       Begin VB.Menu mnpemesanan 
-         Caption         =   "Pemesanan"
+         Caption         =   "Order"
       End
       Begin VB.Menu mnmesinproduksi 
-         Caption         =   "Mesin Produksi"
+         Caption         =   "Machine"
       End
       Begin VB.Menu mnproduk 
-         Caption         =   "Produk"
+         Caption         =   "Product"
       End
       Begin VB.Menu mnpegawai 
-         Caption         =   "Pegawai"
+         Caption         =   "Employee"
       End
       Begin VB.Menu mnperencanaan 
-         Caption         =   "Perencanaan Produksi"
+         Caption         =   "Schedule"
       End
-   End
-   Begin VB.Menu mnlaporan 
-      Caption         =   "Laporan"
-      Begin VB.Menu mnlappemesanan 
-         Caption         =   "Laporan Pemesanan"
+      Begin VB.Menu mnbahanbaku 
+         Caption         =   "Raw Material"
       End
    End
    Begin VB.Menu mnexit 
@@ -214,6 +228,16 @@ Login.TLOGIN.Text = ""
 Login.TPASSWORD.Text = ""
 Login.TLOGIN.SetFocus
 End Sub
+Private Sub Command7_Click()
+    BahanBaku.Show
+    Me.Hide
+End Sub
+
+Private Sub mnbahanbaku_Click()
+    BahanBaku.frm
+    Me.Hide
+End Sub
+
 Private Sub mnexit_Click()
     Pesan = MsgBox("Close Application?", vbQuestion + vbYesNo, "Confirmation")
     If Pesan = vbYes Then End
